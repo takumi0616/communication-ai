@@ -6,7 +6,7 @@
   border-radius: 0.5rem;
 }
 
-.card-history {
+.card_history {
   background-color: #3d6f5d; /* #65B741 */
   color: rgb(251, 246, 238); /* #FBF6EE */
   padding: 1rem;
@@ -14,7 +14,7 @@
   border-radius: 0.5rem;
 }
 
-.card-title {
+.card_title {
   font-family: 'BIZ UDGothic', 'sans-serif';
   font-weight: bold;
   font-size: 2.5rem;
@@ -22,7 +22,7 @@
   text-underline-offset: 0.8rem;
 }
 
-.card-content {
+.card_content {
   margin-top: 1.5rem;
   font-family: 'BIZ UDGothic', 'sans-serif';
   font-size: 2rem;
