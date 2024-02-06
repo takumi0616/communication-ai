@@ -1,0 +1,12 @@
+.header {
+  background-color: #348468;
+  padding: 1rem;
+  text-align: center;
+  color: black; /* ヘッダー内の文字色を黒色に設定 */
+  font-weight: bold;
+  font-size: 32px;
+}
+
+.header p {
+  color: rgb(251, 246, 238); /* 特に <p> タグのテキストカラーを黒に設定 */
+}
