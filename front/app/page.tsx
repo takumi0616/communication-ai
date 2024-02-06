@@ -1,10 +1,8 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
-import Header from './components/Header';
-import Button from './components/Button';
-import Card from './components/Card';
-import CardHistory from './components/CardHistory';
+import React, { useState, useEffect } from 'react';
+import { Header, Button, Card, CardHistory } from './components';
+import styles from './page.module.css';
 
 declare global {
   interface Window {
@@ -23,6 +21,13 @@ const Home = () => {
   const API_KEY = process.env.NEXT_PUBLIC_API_KEY_1;
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [delayForSpeech, setDelayForSpeech] = useState(0);
+  const [fontSize, setFontSize] = useState(180);
+  const increaseFontSize = () => {
+    setFontSize((prevFontSize) => prevFontSize + 20);
+  };
+  const decreaseFontSize = () => {
+    setFontSize((prevFontSize) => prevFontSize - 20);
+  };
 
   useEffect(() => {
     const SpeechRecognition =
@@ -171,36 +176,118 @@ const Home = () => {
 
   const getSpeechRecognitionStatus = () => {
     if (isListening) {
-      return '聞き取り中';
+      return 'お話できます。';
     } else if (isGeneratingResponse) {
-      return '応答の生成中';
+      return '応答を生成中です。';
     }
-    return '停止中';
+    return '動作を停止しています。';
   };
 
   return (
-    <div className="min-h-screen bg-[rgb(193,242,176)] text-[rgb(251,246,238)]">
-      <Header />
-
-      <div className="p-4">
-        <div className="flex justify-center items-center flex-col">
-          <Button onClick={startListening} disabled={isListening}>
-            会話スタート
-          </Button>
-          <Button onClick={stopListening} disabled={!isListening}>
-            会話を停止
-          </Button>
-          <div className="font-bold text-2xl font-sans text-black mt-4">
-            <p>音声認識ステータス: {getSpeechRecognitionStatus()}</p>
+    <div>
+      <Header
+        title="communication-ai"
+        titleStyle={{ fontSize: `${fontSize - 80}%` }}
+      />
+      <nav className={styles.nav}>
+        <div className={styles.nav_button}>
+          <div>
+            <Button
+              onClick={startListening}
+              disabled={isListening}
+              style={{ fontSize: `${fontSize}%` }}
+            >
+              {fontSize > 250 ? (
+                <>
+                  会話
+                  <br />
+                  スタート
+                </>
+              ) : (
+                '会話スタート'
+              )}
+            </Button>
+            <Button
+              onClick={stopListening}
+              disabled={!isListening}
+              style={{ fontSize: `${fontSize}%` }}
+            >
+              {fontSize > 250 ? (
+                <>
+                  会話を
+                  <br />
+                  停止
+                </>
+              ) : (
+                '会話を停止'
+              )}
+            </Button>
+          </div>
+          <div>
+            <Button
+              onClick={increaseFontSize}
+              disabled={fontSize >= 400}
+              style={{ fontSize: `${fontSize}%` }}
+            >
+              {fontSize > 300 ? (
+                <>
+                  文字を
+                  <br />
+                  拡大
+                </>
+              ) : (
+                '文字を拡大'
+              )}
+            </Button>
+            <Button
+              onClick={decreaseFontSize}
+              disabled={fontSize <= 180}
+              style={{ fontSize: `${fontSize}%` }}
+            >
+              {fontSize > 300 ? (
+                <>
+                  文字を
+                  <br />
+                  縮小
+                </>
+              ) : (
+                '文字を縮小'
+              )}
+            </Button>
           </div>
         </div>
-
-        <div className="flex flex-col items-center space-y-4 mt-4">
-          <Card title="お話された言葉" content={inputText} />
-          <Card title="応答の言葉" content={responseText} />
-          <CardHistory title="会話履歴" content={conversationHistory} />
+        <div>
+          <p className={styles.status_bar} style={{ fontSize: `${fontSize}%` }}>
+            音声認識ステータス: {getSpeechRecognitionStatus()}
+          </p>
         </div>
-      </div>
+      </nav>
+      <section className={styles.card_field}>
+        <div className={styles.input_field}>
+          <Card
+            title="話している言葉"
+            content={inputText}
+            titleStyle={{ fontSize: `${fontSize + 80}%` }}
+            contentStyle={{ fontSize: `${fontSize}%` }}
+          />
+        </div>
+        <div className={styles.response_field}>
+          <Card
+            title="応答の言葉"
+            content={responseText}
+            titleStyle={{ fontSize: `${fontSize + 80}%` }}
+            contentStyle={{ fontSize: `${fontSize}%` }}
+          />
+        </div>
+        <div className={styles.history_field}>
+          <CardHistory
+            title="会話の履歴"
+            content={conversationHistory}
+            titleStyle={{ fontSize: `${fontSize + 80}%` }}
+            contentStyle={{ fontSize: `${fontSize}%` }}
+          />
+        </div>
+      </section>
     </div>
   );
 };
