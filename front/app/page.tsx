@@ -69,6 +69,41 @@ const Home = () => {
   const speak = (text: string) => {
     if (text) {
       setIsSpeaking(true); // 音声出力を開始
+      const utterance = new SpeechSynthesisUtterance();
+      const regex = /<em>(.*?)<\/em>|<strong>(.*?)<\/strong>/g;
+      let match;
+      let position = 0;
+      const parts: TextPart[] = [];
+
+      while ((match = regex.exec(text)) !== null) {
+        if (position !== match.index) {
+          parts.push({
+            text: text.slice(position, match.index),
+            emphasis: false,
+          });
+        }
+        parts.push({ text: match[1] || match[2], emphasis: true });
+        position = match.index + match[0].length;
+      }
+
+      if (position < text.length) {
+        parts.push({ text: text.slice(position), emphasis: false });
+      }
+
+      parts.forEach((part: TextPart) => {
+        const speechPart = new SpeechSynthesisUtterance(part.text);
+        if (part.emphasis) {
+          speechPart.pitch = 1.5;
+          speechPart.rate = 1.2;
+        }
+        speechPart.onend = () => {
+          if (parts.indexOf(part) === parts.length - 1) {
+            console.log('読み上げ終了');
+            setIsSpeaking(false); // 音声出力を終了
+          }
+        };
+        window.speechSynthesis.speak(speechPart);
+      });
     }
   };
 
