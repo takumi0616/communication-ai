@@ -1,4 +1,5 @@
 import React, { CSSProperties } from 'react';
+import DOMPurify from 'dompurify';
 import styles from './CardHistory.module.css';
 
 type CardHistoryProps = {
@@ -15,11 +16,19 @@ const CardHistory = ({
   contentStyle,
 }: CardHistoryProps) => {
   // 会話履歴の内容を改行で分割し、それぞれの行を個別の段落として表示
-  const lines = content.split('\n').map((line, index) => (
-    <p key={index} style={{ margin: '5px 0' }}>
-      {line}
-    </p>
-  ));
+  // 各行に含まれるHTMLはサニタイズを行います。
+  const lines = content.split('\n').map((line, index) => {
+    const sanitizedLine = DOMPurify.sanitize(line, {
+      USE_PROFILES: { html: true },
+    });
+    return (
+      <p
+        key={index}
+        style={{ margin: '5px 0' }}
+        dangerouslySetInnerHTML={{ __html: sanitizedLine }}
+      />
+    );
+  });
 
   return (
     <div className={styles.card_history}>

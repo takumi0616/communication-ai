@@ -61,17 +61,14 @@ const Home = () => {
     }
   };
 
+  type TextPart = {
+    text: string;
+    emphasis: boolean;
+  };
+
   const speak = (text: string) => {
     if (text) {
       setIsSpeaking(true); // 音声出力を開始
-      const delay = text.length * 0.1 * 1000; // 文字数 x 0.5秒の遅延時間を計算
-      setDelayForSpeech(delay); // 遅延時間を状態に保存
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.onend = () => {
-        console.log('読み上げ終了');
-        setIsSpeaking(false); // 音声出力を終了
-      };
-      window.speechSynthesis.speak(utterance);
     }
   };
 
@@ -141,6 +138,7 @@ const Home = () => {
       役割を元に相手からの入力された言葉、今までの会話からの情報を参考に、返答のみをして、話し相手になってください。
       入力された返答のみを日本語で出力してください。
       長すぎる返答は相手を混乱させるため、文字数は100文字程度とします。
+      ただし、返答文内の重要なキーワードにたいしてem要素をつけるようにしなさい。
 
       #役割
       認知症患者または独居老人との会話を行う。
@@ -149,7 +147,7 @@ const Home = () => {
       会話はゆっくりとしたペースで進行し、繰り返しや明確な言葉遣いを使用して、理解を促進します。
       ユーザーの感情的なニーズに注意を払い、安心感を提供することを心がけてください。
       また、必要に応じて、リラクゼーションのための話題や軽い運動、趣味に関する話題も取り入れてください。
-      ただし、医療的なアドバイスや診断は行わないこと。
+      重要なキーワードは<em>タグで強調してください。
 
       #今までの会話
       あなたは「話し相手：」です。

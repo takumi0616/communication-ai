@@ -1,4 +1,5 @@
 import React, { CSSProperties } from 'react';
+import DOMPurify from 'dompurify';
 import styles from './Card.module.css';
 
 type CardProps = {
@@ -9,15 +10,17 @@ type CardProps = {
   className?: string;
 };
 
-const Card = ({ title, content, titleStyle, contentStyle }: CardProps) => (
-  <div className={styles.card}>
+const Card = ({ title, content, titleStyle, contentStyle }: CardProps) => {
+  const sanitizedContent = DOMPurify.sanitize(content);
+  return(
+    <div className={styles.card}>
     <p className={styles.card_title} style={titleStyle}>
       {title}
     </p>
-    <p className={styles.card_content} style={contentStyle}>
-      {content}
-    </p>
+    <div className={styles.card_content} style={contentStyle} dangerouslySetInnerHTML={{ __html: sanitizedContent }}>
+    </div>
   </div>
-);
+  )
+}
 
 export default Card;
