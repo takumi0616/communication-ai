@@ -1,4 +1,5 @@
 import React, { useState, useEffect, CSSProperties } from 'react';
+import DOMPurify from 'dompurify'; // 必要時のみ import
 import styles from './Card.module.css';
 
 type CardProps = {
@@ -13,20 +14,8 @@ const Card = ({ title, content, titleStyle, contentStyle }: CardProps) => {
   const [sanitizedContent, setSanitizedContent] = useState('');
 
   useEffect(() => {
-    // クライアントサイドでのみDOMPurifyをロードしてサニタイズする非同期関数
-    const sanitizeContent = async () => {
-      try {
-        const DOMPurify = await import('dompurify');
-        const sanitized = DOMPurify.sanitize(content);
-        setSanitizedContent(sanitized);
-      } catch (error) {
-        console.error('Failed to load or sanitize with DOMPurify:', error);
-        // ここでエラーハンドリングを行うか、デフォルトのアクションを定義
-      }
-    };
-
-    sanitizeContent();
-  }, [content]); // content が変更されたときにのみ再実行
+    setSanitizedContent(DOMPurify.sanitize(content)); // DOMPurifyをすぐに実行
+  }, [content]);
 
   return (
     <div className={styles.card}>
@@ -39,3 +28,4 @@ const Card = ({ title, content, titleStyle, contentStyle }: CardProps) => {
 };
 
 export default Card;
+
