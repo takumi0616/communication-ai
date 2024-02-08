@@ -262,6 +262,7 @@ const Home = () => {
                 onClick={startListening}
                 disabled={isListening}
                 style={{ fontSize: `${fontSize}%` }}
+                ariaLabel='会話の開始'
               >
                 <MdNotStarted />
                 {fontSize > 250 ? (
@@ -278,6 +279,7 @@ const Home = () => {
                 onClick={stopListening}
                 disabled={!isListening}
                 style={{ fontSize: `${fontSize}%` }}
+                ariaLabel='会話の停止'
               >
                 <FaStopCircle />
                 {fontSize > 250 ? (
@@ -295,24 +297,24 @@ const Home = () => {
               <Button
                 onClick={toggleFilter}
                 style={{ fontSize: `${fontSize}%` }}
+                ariaLabel='色の変更'
               >
                 <IoColorPaletteOutline />
-                <p>
-                  {fontSize > 250 ? (
-                    <>
-                      色を
-                      <br />
-                      変更
-                    </>
-                  ) : (
-                    '色を変更'
-                  )}
-                </p>
+                {fontSize > 250 ? (
+                  <>
+                    色を
+                    <br />
+                    変更
+                  </>
+                ) : (
+                  '色を変更'
+                )}
               </Button>
               <Button
                 onClick={increaseFontSize}
                 disabled={fontSize >= 400}
                 style={{ fontSize: `${fontSize}%` }}
+                ariaLabel="文字の拡大"
               >
                 <HiMiniMagnifyingGlassPlus />
                 {fontSize > 250 ? (
@@ -329,6 +331,7 @@ const Home = () => {
                 onClick={decreaseFontSize}
                 disabled={fontSize <= 180}
                 style={{ fontSize: `${fontSize}%` }}
+                ariaLabel='文字の縮小'
               >
                 <HiMiniMagnifyingGlassMinus />
                 {fontSize > 250 ? (
