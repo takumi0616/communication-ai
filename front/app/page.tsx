@@ -6,6 +6,10 @@ import styles from './page.module.css';
 import { IoColorPaletteOutline } from 'react-icons/io5';
 import { HiMiniMagnifyingGlassPlus } from 'react-icons/hi2';
 import { HiMiniMagnifyingGlassMinus } from 'react-icons/hi2';
+import { FaStopCircle } from 'react-icons/fa';
+import { MdNotStarted } from 'react-icons/md';
+import { FaMicrophone } from 'react-icons/fa';
+import { FaMicrophoneSlash } from 'react-icons/fa';
 
 declare global {
   interface Window {
@@ -222,11 +226,26 @@ const Home = () => {
 
   const getSpeechRecognitionStatus = () => {
     if (isListening) {
-      return 'お話できます。';
+      return (
+        <p className="flex items-center gap-3">
+          <FaMicrophone />
+          お話できます。
+        </p>
+      );
     } else if (isGeneratingResponse) {
-      return '応答を生成中です。';
+      return (
+        <p className="flex items-center gap-3">
+          <FaMicrophoneSlash />
+          応答を生成中です。
+        </p>
+      );
     }
-    return '動作を停止しています。';
+    return (
+      <p className="flex items-center gap-3">
+        <FaMicrophoneSlash />
+        動作を停止しています。
+      </p>
+    );
   };
 
   return (
@@ -244,6 +263,7 @@ const Home = () => {
                 disabled={isListening}
                 style={{ fontSize: `${fontSize}%` }}
               >
+                <MdNotStarted />
                 {fontSize > 250 ? (
                   <>
                     会話
@@ -259,6 +279,7 @@ const Home = () => {
                 disabled={!isListening}
                 style={{ fontSize: `${fontSize}%` }}
               >
+                <FaStopCircle />
                 {fontSize > 250 ? (
                   <>
                     会話を
@@ -277,15 +298,15 @@ const Home = () => {
               >
                 <IoColorPaletteOutline />
                 <p>
-                {fontSize > 250 ? (
-                  <>
-                    色を
-                    <br />
-                    変更
-                  </>
-                ) : (
-                  '色を変更'
-                )}
+                  {fontSize > 250 ? (
+                    <>
+                      色を
+                      <br />
+                      変更
+                    </>
+                  ) : (
+                    '色を変更'
+                  )}
                 </p>
               </Button>
               <Button
@@ -294,7 +315,7 @@ const Home = () => {
                 style={{ fontSize: `${fontSize}%` }}
               >
                 <HiMiniMagnifyingGlassPlus />
-                {fontSize >250 ? (
+                {fontSize > 250 ? (
                   <>
                     文字を
                     <br />
@@ -322,13 +343,11 @@ const Home = () => {
               </Button>
             </div>
           </div>
-          <div>
-            <p
-              className={styles.status_bar}
-              style={{ fontSize: `${fontSize}%` }}
-            >
-              音声認識ステータス: {getSpeechRecognitionStatus()}
-            </p>
+          <div
+            className={styles.status_bar}
+            style={{ fontSize: `${fontSize}%` }}
+          >
+            <p>音声認識ステータス:</p> {getSpeechRecognitionStatus()}
           </div>
         </nav>
         <section className={styles.card_field}>

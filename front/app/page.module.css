@@ -4,6 +4,11 @@
 }
 
 .status_bar {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.status_bar p {
   color: #333;
   font-family: 'Mochiy Pop P One', sans-serif;
   font-size: 32px;
