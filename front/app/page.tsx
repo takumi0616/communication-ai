@@ -3,6 +3,9 @@
 import React, { useState, useEffect } from 'react';
 import { Header, Button, Card, CardHistory } from './components';
 import styles from './page.module.css';
+import { IoColorPaletteOutline } from 'react-icons/io5';
+import { HiMiniMagnifyingGlassPlus } from 'react-icons/hi2';
+import { HiMiniMagnifyingGlassMinus } from 'react-icons/hi2';
 
 declare global {
   interface Window {
@@ -27,6 +30,16 @@ const Home = () => {
   };
   const decreaseFontSize = () => {
     setFontSize((prevFontSize) => prevFontSize - 20);
+  };
+
+  const [filter, setFilter] = useState('');
+
+  const toggleFilter = () => {
+    if (filter) {
+      setFilter('');
+    } else {
+      setFilter('grayscale(100%) contrast(200%)');
+    }
   };
 
   useEffect(() => {
@@ -217,110 +230,134 @@ const Home = () => {
   };
 
   return (
-    <div>
+    <div style={{ filter: filter }}>
       <Header
         title="communication-ai"
         titleStyle={{ fontSize: `${fontSize - 80}%` }}
       />
-      <nav className={styles.nav}>
-        <div className={styles.nav_button}>
-          <div>
-            <Button
-              onClick={startListening}
-              disabled={isListening}
-              style={{ fontSize: `${fontSize}%` }}
-            >
-              {fontSize > 250 ? (
-                <>
-                  会話
-                  <br />
-                  スタート
-                </>
-              ) : (
-                '会話スタート'
-              )}
-            </Button>
-            <Button
-              onClick={stopListening}
-              disabled={!isListening}
-              style={{ fontSize: `${fontSize}%` }}
-            >
-              {fontSize > 250 ? (
-                <>
-                  会話を
-                  <br />
-                  停止
-                </>
-              ) : (
-                '会話を停止'
-              )}
-            </Button>
+      <div className={styles.container}>
+        <nav className={styles.nav}>
+          <div className={styles.nav_button}>
+            <div>
+              <Button
+                onClick={startListening}
+                disabled={isListening}
+                style={{ fontSize: `${fontSize}%` }}
+              >
+                {fontSize > 250 ? (
+                  <>
+                    会話
+                    <br />
+                    スタート
+                  </>
+                ) : (
+                  '会話スタート'
+                )}
+              </Button>
+              <Button
+                onClick={stopListening}
+                disabled={!isListening}
+                style={{ fontSize: `${fontSize}%` }}
+              >
+                {fontSize > 250 ? (
+                  <>
+                    会話を
+                    <br />
+                    停止
+                  </>
+                ) : (
+                  '会話を停止'
+                )}
+              </Button>
+            </div>
+            <div>
+              <Button
+                onClick={toggleFilter}
+                style={{ fontSize: `${fontSize}%` }}
+              >
+                <IoColorPaletteOutline />
+                <p>
+                {fontSize > 250 ? (
+                  <>
+                    色を
+                    <br />
+                    変更
+                  </>
+                ) : (
+                  '色を変更'
+                )}
+                </p>
+              </Button>
+              <Button
+                onClick={increaseFontSize}
+                disabled={fontSize >= 400}
+                style={{ fontSize: `${fontSize}%` }}
+              >
+                <HiMiniMagnifyingGlassPlus />
+                {fontSize >250 ? (
+                  <>
+                    文字を
+                    <br />
+                    拡大
+                  </>
+                ) : (
+                  '文字を拡大'
+                )}
+              </Button>
+              <Button
+                onClick={decreaseFontSize}
+                disabled={fontSize <= 180}
+                style={{ fontSize: `${fontSize}%` }}
+              >
+                <HiMiniMagnifyingGlassMinus />
+                {fontSize > 250 ? (
+                  <>
+                    文字を
+                    <br />
+                    縮小
+                  </>
+                ) : (
+                  '文字を縮小'
+                )}
+              </Button>
+            </div>
           </div>
           <div>
-            <Button
-              onClick={increaseFontSize}
-              disabled={fontSize >= 400}
+            <p
+              className={styles.status_bar}
               style={{ fontSize: `${fontSize}%` }}
             >
-              {fontSize > 300 ? (
-                <>
-                  文字を
-                  <br />
-                  拡大
-                </>
-              ) : (
-                '文字を拡大'
-              )}
-            </Button>
-            <Button
-              onClick={decreaseFontSize}
-              disabled={fontSize <= 180}
-              style={{ fontSize: `${fontSize}%` }}
-            >
-              {fontSize > 300 ? (
-                <>
-                  文字を
-                  <br />
-                  縮小
-                </>
-              ) : (
-                '文字を縮小'
-              )}
-            </Button>
+              音声認識ステータス: {getSpeechRecognitionStatus()}
+            </p>
           </div>
-        </div>
-        <div>
-          <p className={styles.status_bar} style={{ fontSize: `${fontSize}%` }}>
-            音声認識ステータス: {getSpeechRecognitionStatus()}
-          </p>
-        </div>
-      </nav>
-      <section className={styles.card_field}>
-        <div className={styles.input_field}>
-          <Card
-            title="話している言葉"
-            content={inputText}
-            titleStyle={{ fontSize: `${fontSize + 80}%` }}
-            contentStyle={{ fontSize: `${fontSize}%` }}
-          />
-        </div>
-        <div className={styles.response_field}>
-          <Card
-            title="応答の言葉"
-            content={responseText}
-            titleStyle={{ fontSize: `${fontSize + 80}%` }}
-            contentStyle={{ fontSize: `${fontSize}%` }}
-          />
-        </div>
-        <div className={styles.history_field}>
-          <CardHistory
-            title="会話の履歴"
-            content={conversationHistory}
-            titleStyle={{ fontSize: `${fontSize + 80}%` }}
-            contentStyle={{ fontSize: `${fontSize}%` }}
-          />
-        </div>
-      </section>
+        </nav>
+        <section className={styles.card_field}>
+          <div className={styles.input_field}>
+            <Card
+              title="話している言葉"
+              content={inputText}
+              titleStyle={{ fontSize: `${fontSize + 80}%` }}
+              contentStyle={{ fontSize: `${fontSize}%` }}
+            />
+          </div>
+          <div className={styles.response_field}>
+            <Card
+              title="応答の言葉"
+              content={responseText}
+              titleStyle={{ fontSize: `${fontSize + 80}%` }}
+              contentStyle={{ fontSize: `${fontSize}%` }}
+            />
+          </div>
+          <div className={styles.history_field}>
+            <CardHistory
+              title="会話の履歴"
+              content={conversationHistory}
+              titleStyle={{ fontSize: `${fontSize + 80}%` }}
+              contentStyle={{ fontSize: `${fontSize}%` }}
+            />
+          </div>
+        </section>
+      </div>
     </div>
   );
 };

@@ -4,15 +4,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Mochiy+Pop+P+One&display=swap');
 
 :root {
-  --foreground-rgb: 251, 246, 238; /* #FBF6EE を RGB 形式に変換 */
+  --foreground-rgb: #3d6f5d; /* #FBF6EE を RGB 形式に変換 */
   --background-color: #f8f6f2;
 }
 
 body {
   color: rgb(var(--foreground-rgb)); /* 文字の色の設定 */
   background-color: rgb(var(--background-color)); /* 背景色の設定 */
-  border: 0.7rem solid #348468;
-  border-top: none;
 }
 
 ::-webkit-scrollbar {
