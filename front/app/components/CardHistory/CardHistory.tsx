@@ -29,7 +29,7 @@ const CardHistory = ({ title, content, titleStyle, contentStyle }: CardHistoryPr
   }, [content]);
 
   return (
-    <div className={styles.card_history}>
+    <div className={styles.card_history}  tabIndex={0}>
       <p className={styles.card_title} style={titleStyle}>
         {title}
       </p>

@@ -18,7 +18,7 @@ const Card = ({ title, content, titleStyle, contentStyle }: CardProps) => {
   }, [content]);
 
   return (
-    <div className={styles.card}>
+    <div className={styles.card} tabIndex={0}>
       <p className={styles.card_title} style={titleStyle}>
         {title}
       </p>
