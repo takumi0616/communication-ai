@@ -28,3 +28,20 @@
   font-size: 2rem;
   min-height: 40vh; /* content 部分の最小の高さを設定 */
 }
+
+.card_field {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding: 0 1rem 1rem;
+  gap: 0.5rem;
+}
+
+.input_field {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.response_field {
+  grid-column: 2;
+  grid-row: 1;
+}
