@@ -7,6 +7,6 @@
   font-size: 32px;
 }
 
-.header p {
+.header h1 {
   color: rgb(251, 246, 238); /* 特に <p> タグのテキストカラーを黒に設定 */
 }
