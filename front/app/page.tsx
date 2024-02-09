@@ -1,15 +1,15 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Header, Button, Card, CardHistory } from './components';
+import { Header, Button, Card, CardHistory, MouseTracker } from './components';
 import styles from './page.module.css';
 import { IoColorPaletteOutline } from 'react-icons/io5';
-import { HiMiniMagnifyingGlassPlus } from 'react-icons/hi2';
-import { HiMiniMagnifyingGlassMinus } from 'react-icons/hi2';
-import { FaStopCircle } from 'react-icons/fa';
+import {
+  HiMiniMagnifyingGlassPlus,
+  HiMiniMagnifyingGlassMinus,
+} from 'react-icons/hi2';
+import { FaStopCircle, FaMicrophone, FaMicrophoneSlash } from 'react-icons/fa';
 import { MdNotStarted } from 'react-icons/md';
-import { FaMicrophone } from 'react-icons/fa';
-import { FaMicrophoneSlash } from 'react-icons/fa';
 
 declare global {
   interface Window {
@@ -254,7 +254,7 @@ const Home = () => {
         title="communication-ai"
         titleStyle={{ fontSize: `${fontSize - 80}%` }}
       />
-      <div className={styles.container}>
+      <main className={styles.container}>
         <nav className={styles.nav}>
           <div className={styles.nav_button}>
             <div>
@@ -262,7 +262,7 @@ const Home = () => {
                 onClick={startListening}
                 disabled={isListening}
                 style={{ fontSize: `${fontSize}%` }}
-                ariaLabel='会話の開始'
+                ariaLabel="会話の開始"
               >
                 <MdNotStarted />
                 {fontSize > 250 ? (
@@ -279,7 +279,7 @@ const Home = () => {
                 onClick={stopListening}
                 disabled={!isListening}
                 style={{ fontSize: `${fontSize}%` }}
-                ariaLabel='会話の停止'
+                ariaLabel="会話の停止"
               >
                 <FaStopCircle />
                 {fontSize > 250 ? (
@@ -297,7 +297,7 @@ const Home = () => {
               <Button
                 onClick={toggleFilter}
                 style={{ fontSize: `${fontSize}%` }}
-                ariaLabel='色の変更'
+                ariaLabel="色の変更"
               >
                 <IoColorPaletteOutline />
                 {fontSize > 250 ? (
@@ -331,7 +331,7 @@ const Home = () => {
                 onClick={decreaseFontSize}
                 disabled={fontSize <= 180}
                 style={{ fontSize: `${fontSize}%` }}
-                ariaLabel='文字の縮小'
+                ariaLabel="文字の縮小"
               >
                 <HiMiniMagnifyingGlassMinus />
                 {fontSize > 250 ? (
@@ -353,33 +353,33 @@ const Home = () => {
             <p>音声認識ステータス:</p> {getSpeechRecognitionStatus()}
           </div>
         </nav>
-        <section className={styles.card_field}>
-          <div className={styles.input_field}>
+        <div className={styles.card_field}>
+          <section className={styles.input_field}>
             <Card
               title="話している言葉"
               content={inputText}
               titleStyle={{ fontSize: `${fontSize + 80}%` }}
               contentStyle={{ fontSize: `${fontSize}%` }}
             />
-          </div>
-          <div className={styles.response_field}>
+          </section>
+          <section className={styles.response_field}>
             <Card
               title="応答の言葉"
               content={responseText}
               titleStyle={{ fontSize: `${fontSize + 80}%` }}
               contentStyle={{ fontSize: `${fontSize}%` }}
             />
-          </div>
-          <div className={styles.history_field}>
+          </section>
+          <section className={styles.history_field}>
             <CardHistory
               title="会話の履歴"
               content={conversationHistory}
               titleStyle={{ fontSize: `${fontSize + 80}%` }}
               contentStyle={{ fontSize: `${fontSize}%` }}
             />
-          </div>
-        </section>
-      </div>
+          </section>
+        </div>
+      </main>
     </div>
   );
 };

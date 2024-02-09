@@ -7,7 +7,6 @@ type CardProps = {
   content: string;
   titleStyle?: CSSProperties;
   contentStyle?: CSSProperties;
-  className?: string;
 };
 
 const Card = ({ title, content, titleStyle, contentStyle }: CardProps) => {
