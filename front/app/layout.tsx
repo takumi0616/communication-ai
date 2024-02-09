@@ -5,7 +5,7 @@ import './globals.css';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'communication-ai',
+  title: 'Communication AI',
   description: '誰もが使える音声対話WEBアプリケーションです。',
   icons: {
     icon:'people_icon_234458.ico',
