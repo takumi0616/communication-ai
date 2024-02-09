@@ -380,6 +380,7 @@ const Home = () => {
           </section>
         </div>
       </main>
+      <MouseTracker />
     </div>
   );
 };
