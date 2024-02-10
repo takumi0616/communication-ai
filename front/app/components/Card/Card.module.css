@@ -1,9 +1,16 @@
 .card {
-  background-color: #3d6f5d; /* #65B741 */
-  color: rgb(251, 246, 238); /* #FBF6EE */
+  background-color: #3d6f5d;
+  color: #ffffff;
   padding: 1.5rem;
   width: auto;
   border-radius: 0.5rem;
+  transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:focus {
+  background-color: #333;
+  color: #ffffff;
+  outline: none;
 }
 
 .card_history {
