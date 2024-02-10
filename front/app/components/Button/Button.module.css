@@ -2,7 +2,7 @@
   background-color: #971805;
   color: #fbf6ee;
   padding: 0.5rem 1rem;
-  border: none;
+  border: 3px solid transparent;
   border-radius: 0.25rem;
   cursor: pointer;
   font-size: 24px;
@@ -10,12 +10,12 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  transition: background-color 0.3s ease, box-shadow 0.3s ease, border 0.3s ease;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
 }
 
 .button:focus {
   background-color: #ac1f09;
-  border: 3px solid #ffffff;
+  border-color: #ffffff;
   box-shadow: 0 0 0 4px #000000;
   outline: none;
 }
@@ -23,5 +23,5 @@
 .button:disabled {
   color: #333;
   background-color: #ffffff;
-  border: 2px solid #333;
+  border: 3px solid #333;
 }
