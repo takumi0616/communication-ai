@@ -1,6 +1,11 @@
 import React, { CSSProperties } from 'react';
+import { Lexend } from "next/font/google";
 import styles from './Header.module.css';
 
+const LexendFont = Lexend({
+  weight: "700",
+  subsets: ["latin"],
+});
 type HeaderProps = {
   title: string;
   titleStyle?: CSSProperties;
@@ -8,7 +13,7 @@ type HeaderProps = {
 
 const Header = ({ title, titleStyle }: HeaderProps) => (
   <header className={styles.header}>
-    <h1 style={titleStyle}>{title}</h1>
+    <h1 className={LexendFont.className} style={titleStyle}>{title}</h1>
   </header>
 );
 
