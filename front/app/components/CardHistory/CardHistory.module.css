@@ -1,0 +1,34 @@
+.card_history {
+  background-color: #3d6f5d; /* #65B741 */
+  color: rgb(251, 246, 238); /* #FBF6EE */
+  padding: 1rem;
+  width: auto;
+  border-radius: 0.5rem;
+  transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card_history:focus {
+  background-color: #333;
+  color: #ffffff;
+  outline: none;
+}
+
+.card_title {
+  font-family: 'BIZ UDGothic', 'sans-serif';
+  font-weight: bold;
+  font-size: 2.5rem;
+  text-decoration: underline;
+  text-underline-offset: 0.8rem;
+}
+
+.card_content {
+  margin-top: 1.5rem;
+  font-family: 'BIZ UDGothic', 'sans-serif';
+  font-size: 2rem;
+  min-height: 40vh; /* content 部分の最小の高さを設定 */
+}
+
+.history_field {
+  grid-row: 2;
+  grid-column: span 2;
+}

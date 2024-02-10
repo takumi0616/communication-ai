@@ -1,14 +1,91 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
 @import url('https://fonts.googleapis.com/css2?family=Mochiy+Pop+P+One&display=swap');
 
 :root {
-  --foreground-rgb: 251, 246, 238; /* #FBF6EE を RGB 形式に変換 */
-  --background-color: 193, 242, 176; /* #65B741 を RGB 形式に変換 */
+  --foreground-rgb: #3d6f5d; /* #FBF6EE を RGB 形式に変換 */
+  --background-color: #f8f6f2;
 }
 
 body {
   color: rgb(var(--foreground-rgb)); /* 文字の色の設定 */
   background-color: rgb(var(--background-color)); /* 背景色の設定 */
+}
+
+::-webkit-scrollbar {
+  width: 2rem;
+}
+
+::-webkit-scrollbar-track {
+  background: #ffffff;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #333333;
+  border-radius: 0.9rem;
+  border-right: 4px solid transparent;
+  border-left: 4px solid transparent;
+  background-clip: padding-box;
+}
+
+::-webkit-scrollbar-horizontal {
+  height: 1.5rem;
+}
+
+::-webkit-scrollbar-track-horizontal {
+  background: #ffffff;
+}
+
+::-webkit-scrollbar-thumb-horizontal {
+  background: #333;
+}
+
+::-webkit-scrollbar-button:single-button {
+  background-color: #bbbbbb;
+  display: block;
+  border-style: solid;
+  height: 13px;
+  width: 16px;
+}
+
+::-webkit-scrollbar-button:single-button:vertical:decrement {
+  background-color: #333;
+  height: 1.5rem;
+}
+
+::-webkit-scrollbar-button:single-button:vertical:increment {
+  background-color: #333;
+  height: 1.5rem;
+}
+
+.pointer.large {
+  width: 50px;
+  height: 50px;
+  top: -27px;
+  left: -27px;
+  background: rgba(0, 157, 255, 0);
+  border: 2px solid rgba(0, 157, 255, 0.5);
+  border-radius: 50%;
+  transition: 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+
+.pointer {
+  width: 40px;
+  height: 40px;
+  background: rgba(0, 157, 255, 0.75);
+  position: fixed;
+  top: -20px;
+  left: -20px;
+  border-radius: 50%;
+  transition: 1s cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+
+.pointer.small {
+  width: 15px;
+  height: 15px;
+  top: -7.5px;
+  left: -7.5px;
+  background: rgba(0, 119, 255, 0.5);
+  transition: 0.2s cubic-bezier(0.075, 0.82, 0.165, 1) transform;
 }
