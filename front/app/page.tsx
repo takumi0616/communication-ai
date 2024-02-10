@@ -27,7 +27,6 @@ const Home = () => {
   const [isGeneratingResponse, setIsGeneratingResponse] = useState(false);
   const API_KEY = process.env.NEXT_PUBLIC_API_KEY_1;
   const [isSpeaking, setIsSpeaking] = useState(false);
-  const [delayForSpeech, setDelayForSpeech] = useState(0);
   const [fontSize, setFontSize] = useState(180);
   const increaseFontSize = () => {
     setFontSize((prevFontSize) => prevFontSize + 20);
@@ -52,12 +51,18 @@ const Home = () => {
     if (SpeechRecognition) {
       const recognitionInstance = new SpeechRecognition();
       recognitionInstance.lang = 'ja-JP';
-      recognitionInstance.onresult = (event: any) => {
+      recognitionInstance.continuous = false;
+      recognitionInstance.interimResults = false;
+      recognitionInstance.onresult = (event: {
+        results: { transcript: any }[][];
+      }) => {
         const text = event.results[0][0].transcript;
         setInputText(text);
         handleSubmit(text);
       };
-      recognitionInstance.onend = () => setIsListening(false);
+      recognitionInstance.onend = () => {
+        setIsListening(false);
+      };
       setRecognition(recognitionInstance);
     }
   }, []);
@@ -66,7 +71,7 @@ const Home = () => {
     if (recognition && !isListening) {
       recognition.start();
       setIsListening(true);
-      setIsGeneratingResponse(false); // 応答生成中ではない
+      setIsGeneratingResponse(false);
     }
   };
 
@@ -74,8 +79,55 @@ const Home = () => {
     if (recognition && isListening) {
       recognition.stop();
       setIsListening(false);
-      setIsGeneratingResponse(true); // 応答を生成中に設定
+      setIsGeneratingResponse(true);
+      const text = recognition.result[0][0].transcript;
+      setInputText(text);
+      handleSubmit(text);
     }
+  };
+
+  const handleSubmit = async (spokenText: string) => {
+    setConversationHistory((prev) => prev + `あなた：${spokenText}\n`);
+
+    const instruction = `
+      #相手からの入力された言葉
+      ${spokenText}
+  
+      #命令文
+      あなたは「話し相手」です。
+      役割を元に相手からの入力された言葉、今までの会話からの情報を参考に、返答のみをして、話し相手になってください。
+      入力された返答のみを日本語で出力してください。
+      長すぎる返答は相手を混乱させるため、文字数は100文字程度とします。
+      ただし、返答文内の重要なキーワードにem要素をつけるようにしなさい。
+  
+      #役割
+      認知症患者または独居老人との会話を行う。
+      認知症患者または独居老人との会話を行う。
+      ユーザーの興味や過去の経験に基づいて、親しみやすく、理解しやすい話題を提供してください。
+      会話はゆっくりとしたペースで進行し、繰り返しや明確な言葉遣いを使用して、理解を促進します。
+      ユーザーの感情的なニーズに注意を払い、安心感を提供することを心がけてください。
+      また、必要に応じて、リラクゼーションのための話題や軽い運動、趣味に関する話題も取り入れてください。
+      重要なキーワードは<em>タグで強調してください。
+  
+      #今までの会話
+      あなたは「話し相手：」です。
+      「あなた：」は、言葉を入力している人間のユーザーになります。
+      ${conversationHistory}
+    `;
+
+    const response = await generateText(instruction);
+    setConversationHistory((prev) => prev + `話し相手：${response}\n`);
+    setResponseText(response);
+    speak(response);
+
+    await new Promise<void>((resolve) => {
+      const checkIfSpeakingEnded = setInterval(() => {
+        if (!isSpeaking) {
+          clearInterval(checkIfSpeakingEnded);
+          resolve();
+        }
+      }, 100);
+    });
   };
 
   type TextPart = {
@@ -85,13 +137,13 @@ const Home = () => {
 
   const speak = (text: string) => {
     if (text) {
-      setIsSpeaking(true); // 音声出力を開始
-      const utterance = new SpeechSynthesisUtterance();
+      setIsSpeaking(true);
+
+      let utteranceIndex = 0;
       const regex = /<em>(.*?)<\/em>|<strong>(.*?)<\/strong>/g;
       let match;
       let position = 0;
       const parts: TextPart[] = [];
-
       while ((match = regex.exec(text)) !== null) {
         if (position !== match.index) {
           parts.push({
@@ -102,47 +154,36 @@ const Home = () => {
         parts.push({ text: match[1] || match[2], emphasis: true });
         position = match.index + match[0].length;
       }
-
       if (position < text.length) {
         parts.push({ text: text.slice(position), emphasis: false });
       }
 
-      parts.forEach((part: TextPart) => {
-        const speechPart = new SpeechSynthesisUtterance(part.text);
-        if (part.emphasis) {
-          speechPart.pitch = 1.5;
-          speechPart.rate = 1.2;
-        }
-        speechPart.onend = () => {
-          if (parts.indexOf(part) === parts.length - 1) {
-            console.log('読み上げ終了');
-            setIsSpeaking(false); // 音声出力を終了
+      const speakNextPart = () => {
+        if (utteranceIndex < parts.length) {
+          const part = parts[utteranceIndex++];
+          const speechPart = new SpeechSynthesisUtterance(part.text);
+          if (part.emphasis) {
+            speechPart.pitch = 1.5;
+            speechPart.rate = 1.2;
           }
-        };
-        window.speechSynthesis.speak(speechPart);
-      });
+          speechPart.onend = () => {
+            if (utteranceIndex >= parts.length) {
+              console.log('読み上げ終了');
+              setIsSpeaking(false);
+            } else {
+              speakNextPart();
+            }
+          };
+          window.speechSynthesis.speak(speechPart);
+        }
+      };
+      speakNextPart();
     }
   };
 
-  useEffect(() => {
-    if (!isListening && !isSpeaking && recognition && !isGeneratingResponse) {
-      const timer = setTimeout(() => {
-        startListening();
-      }, delayForSpeech);
-
-      return () => clearTimeout(timer);
-    }
-  }, [
-    isListening,
-    isSpeaking,
-    recognition,
-    delayForSpeech,
-    isGeneratingResponse,
-  ]);
-
   const generateText = async (instruction: string) => {
     const body = {
-      model: 'gpt-4-1106-preview',
+      model: 'gpt-3.5-turbo-0125',
       messages: [{ role: 'user', content: instruction }],
       max_tokens: 1000,
     };
@@ -176,52 +217,6 @@ const Home = () => {
       setIsGeneratingResponse(false); // 応答生成完了
       return '';
     }
-  };
-
-  const handleSubmit = async (spokenText: string) => {
-    setConversationHistory((prev) => prev + `あなた：${spokenText}\n`);
-
-    const instruction = `
-      #相手からの入力された言葉
-      ${spokenText}
-
-      #命令文
-      あなたは「話し相手」です。
-      役割を元に相手からの入力された言葉、今までの会話からの情報を参考に、返答のみをして、話し相手になってください。
-      入力された返答のみを日本語で出力してください。
-      長すぎる返答は相手を混乱させるため、文字数は100文字程度とします。
-      ただし、返答文内の重要なキーワードにたいしてem要素をつけるようにしなさい。
-
-      #役割
-      認知症患者または独居老人との会話を行う。
-      認知症患者または独居老人との会話を行う。
-      ユーザーの興味や過去の経験に基づいて、親しみやすく、理解しやすい話題を提供してください。
-      会話はゆっくりとしたペースで進行し、繰り返しや明確な言葉遣いを使用して、理解を促進します。
-      ユーザーの感情的なニーズに注意を払い、安心感を提供することを心がけてください。
-      また、必要に応じて、リラクゼーションのための話題や軽い運動、趣味に関する話題も取り入れてください。
-      重要なキーワードは<em>タグで強調してください。
-
-      #今までの会話
-      あなたは「話し相手：」です。
-      「あなた：」は、言葉を入力している人間のユーザーになります。
-      ${conversationHistory}
-    `;
-
-    const response = await generateText(instruction);
-    setConversationHistory((prev) => prev + `話し相手：${response}\n`);
-    setResponseText(response);
-    speak(response); // 返答を読み上げる
-
-    await new Promise<void>((resolve) => {
-      const checkIfSpeakingEnded = setInterval(() => {
-        if (!isSpeaking) {
-          clearInterval(checkIfSpeakingEnded);
-          resolve(); // この行を追加
-        }
-      }, 100);
-    });
-
-    startListening(); // ここでリスニングを再開
   };
 
   const getSpeechRecognitionStatus = () => {
