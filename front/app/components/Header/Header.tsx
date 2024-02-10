@@ -8,7 +8,7 @@ type HeaderProps = {
 
 const Header = ({ title, titleStyle }: HeaderProps) => (
   <header className={styles.header}>
-    <p style={titleStyle}>{title}</p>
+    <h1 style={titleStyle}>{title}</h1>
   </header>
 );
 

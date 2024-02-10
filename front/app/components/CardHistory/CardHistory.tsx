@@ -3,13 +3,20 @@ import DOMPurify from 'dompurify'; // 必要時のみ import
 import styles from './CardHistory.module.css';
 
 type CardHistoryProps = {
+  name: string;
   title: string;
   content: string;
   titleStyle?: CSSProperties;
   contentStyle?: CSSProperties;
 };
 
-const CardHistory = ({ title, content, titleStyle, contentStyle }: CardHistoryProps) => {
+const CardHistory = ({
+  name,
+  title,
+  content,
+  titleStyle,
+  contentStyle,
+}: CardHistoryProps) => {
   const [sanitizedLines, setSanitizedLines] = useState<JSX.Element[]>([]);
 
   useEffect(() => {
@@ -29,10 +36,10 @@ const CardHistory = ({ title, content, titleStyle, contentStyle }: CardHistoryPr
   }, [content]);
 
   return (
-    <div className={styles.card_history}  tabIndex={0}>
-      <p className={styles.card_title} style={titleStyle}>
-        {title}
-      </p>
+    <div className={`${styles.card_history} ${styles[name]}`} tabIndex={0}>
+      <h2 className={styles.card_title} style={titleStyle}>
+        <p>{title}</p>
+      </h2>
       <div
         className={styles.card_content}
         style={{ ...contentStyle, maxHeight: '300px', overflowY: 'scroll' }}
@@ -44,4 +51,3 @@ const CardHistory = ({ title, content, titleStyle, contentStyle }: CardHistoryPr
 };
 
 export default CardHistory;
-

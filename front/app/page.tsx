@@ -222,24 +222,24 @@ const Home = () => {
   const getSpeechRecognitionStatus = () => {
     if (isListening) {
       return (
-        <p className="flex items-center gap-3">
+        <div className="flex items-center gap-3">
           <FaMicrophone />
-          話してください。
-        </p>
+          お話できます。
+        </div>
       );
     } else if (isGeneratingResponse) {
       return (
-        <p className="flex items-center gap-3">
+        <div className="flex items-center gap-3">
           <FaMicrophoneSlash />
           応答を生成中です。
-        </p>
+        </div>
       );
     }
     return (
-      <p className="flex items-center gap-3">
+      <div className="flex items-center gap-3">
         <FaMicrophoneSlash />
-        会話準備完了。
-      </p>
+        動作を停止しています。
+      </div>
     );
   };
 
@@ -345,34 +345,31 @@ const Home = () => {
             className={styles.status_bar}
             style={{ fontSize: `${fontSize}%` }}
           >
-            <p>音声認識ステータス:</p> {getSpeechRecognitionStatus()}
+            音声認識ステータス: {getSpeechRecognitionStatus()}
           </div>
         </nav>
         <div className={styles.card_field}>
-          <section className={styles.input_field}>
-            <Card
-              title="話している言葉"
-              content={inputText}
-              titleStyle={{ fontSize: `${fontSize + 80}%` }}
-              contentStyle={{ fontSize: `${fontSize}%` }}
-            />
-          </section>
-          <section className={styles.response_field}>
-            <Card
-              title="応答の言葉"
-              content={responseText}
-              titleStyle={{ fontSize: `${fontSize + 80}%` }}
-              contentStyle={{ fontSize: `${fontSize}%` }}
-            />
-          </section>
-          <section className={styles.history_field}>
-            <CardHistory
-              title="会話の履歴"
-              content={conversationHistory}
-              titleStyle={{ fontSize: `${fontSize + 80}%` }}
-              contentStyle={{ fontSize: `${fontSize}%` }}
-            />
-          </section>
+          <Card
+            title="話している言葉"
+            content={inputText}
+            titleStyle={{ fontSize: `${fontSize + 80}%` }}
+            contentStyle={{ fontSize: `${fontSize}%` }}
+            name="input_field"
+          />
+          <Card
+            title="応答の言葉"
+            content={responseText}
+            titleStyle={{ fontSize: `${fontSize + 80}%` }}
+            contentStyle={{ fontSize: `${fontSize}%` }}
+            name="response_field"
+          />
+          <CardHistory
+            title="会話の履歴"
+            content={conversationHistory}
+            titleStyle={{ fontSize: `${fontSize + 80}%` }}
+            contentStyle={{ fontSize: `${fontSize}%` }}
+            name="history_field"
+          />
         </div>
       </main>
       <MouseTracker />

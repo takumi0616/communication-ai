@@ -3,13 +3,14 @@ import DOMPurify from 'dompurify'; // 必要時のみ import
 import styles from './Card.module.css';
 
 type CardProps = {
+  name: string;
   title: string;
   content: string;
   titleStyle?: CSSProperties;
   contentStyle?: CSSProperties;
 };
 
-const Card = ({ title, content, titleStyle, contentStyle }: CardProps) => {
+const Card = ({ name, title, content, titleStyle, contentStyle }: CardProps) => {
   const [sanitizedContent, setSanitizedContent] = useState('');
 
   useEffect(() => {
@@ -17,10 +18,10 @@ const Card = ({ title, content, titleStyle, contentStyle }: CardProps) => {
   }, [content]);
 
   return (
-    <div className={styles.card} tabIndex={0}>
-      <p className={styles.card_title} style={titleStyle}>
+    <div className={`${styles.card} ${styles[name]}`} tabIndex={0}>
+      <h2 className={styles.card_title} style={titleStyle}>
         {title}
-      </p>
+      </h2>
       <div className={styles.card_content} style={contentStyle} dangerouslySetInnerHTML={{ __html: sanitizedContent }} />
     </div>
   );
